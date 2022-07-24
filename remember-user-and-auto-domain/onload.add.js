@@ -10,6 +10,7 @@ var defaultDomain = 'domain.tld'
 // Amount of hours the username should be remembered in cookie (0 = disabled)
 var rememberUserCookieLifetime = 24 * 365; // one year
 ////////////////////////////////////////////////
+// DO NOT TOUCH BELOW.
 
 // Utility functions
 function PKUtil() {}
@@ -24,7 +25,7 @@ PKUtil.rememberSsoUsername = function (username) {
     return true;
 }
 // Get remembered SSO username from cookie as string
-PKUtil.getRemberedSsoUsername = function () {
+PKUtil.getRememberedSsoUsername = function () {
     if (document.cookie) {
         if (document.cookie.indexOf('sso_username') == 0) {
             var cookies = document.cookie.split('=');
@@ -43,7 +44,7 @@ PKUtil.formatUPN = function (username) {
     return username;
 }
 
-// Normal login Pagination
+// Normal login pagination / login form.
 if (typeof document.forms['loginFormPaginated'] != 'undefined' && typeof PaginationManager != 'undefined') {
     PaginationManager.validateAndNext = function () {
         var u = new InputUtil();
@@ -80,7 +81,7 @@ if (typeof document.forms['loginFormPaginated'] != 'undefined' && typeof Paginat
     }
 
     // If cookie is set, set it
-    var remUser = PKUtil.getRemberedSsoUsername()
+    var remUser = PKUtil.getRememberedSsoUsername()
     if (remUser != '') {
         // Fill out username field
         document.getElementById(Login.userNameInput).value = remUser;
@@ -89,10 +90,10 @@ if (typeof document.forms['loginFormPaginated'] != 'undefined' && typeof Paginat
     }
 }
 
-// For change password dialog
+// THis code is for "Update/Change Password" support
 if (typeof document.forms['updatePasswordForm'] != 'undefined' && typeof PaginationManager == 'undefined') {
     // Fill out username field if we have cookie set
-    var remUser = PKUtil.getRemberedSsoUsername()
+    var remUser = PKUtil.getRememberedSsoUsername()
     if (remUser != '') {
         document.getElementById(UpdatePassword.userNameInput).value = remUser;
         document.getElementById(UpdatePassword.oldPasswordInput).focus();
