@@ -1,12 +1,13 @@
 ////////////////////////////////////////////////
-// Remember username + auto domain suffix
+// Remember username + auto domain suffix v2
 // Copyright (c) by patrik.kernstock.net @ 2022-07-24 under GNU GPLv3 license. All rights reserved.
+// https://github.com/patschi/adfs-themes/tree/master/remember-user-and-auto-domain
 // https://patrik.kernstock.net/2021/06/adfs-2019-allow-logon-with-samaccountname/
 
 // CONFIGURATION
 // The default domain to add when not specified
 var defaultDomain = 'domain.tld'
-// Amount of hours the username should be remembered in cookie
+// Amount of hours the username should be remembered in cookie (0 = disabled)
 var rememberUserCookieLifetime = 24 * 365; // one year
 ////////////////////////////////////////////////
 
@@ -14,9 +15,13 @@ var rememberUserCookieLifetime = 24 * 365; // one year
 function PKUtil() {}
 // Remember SSO username in cookie
 PKUtil.rememberSsoUsername = function (username) {
+    if (rememberUserCookieLifetime == 0) {
+        return false;
+    }
     var date = new Date();
     date.setTime(date.getTime() + (rememberUserCookieLifetime * 60 * 60 * 1000));
     document.cookie = 'sso_username=' + encodeURIComponent(username) + '; expires=' + date.toUTCString() + '; path=/; SameSite=Lax';
+    return true;
 }
 // Get remembered SSO username from cookie as string
 PKUtil.getRemberedSsoUsername = function () {
