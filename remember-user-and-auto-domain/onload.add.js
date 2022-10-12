@@ -80,12 +80,12 @@ if (typeof document.forms['loginFormPaginated'] != 'undefined' && typeof Paginat
         return true;
     }
 
-    // If cookie is set, set it
+    // If username cookie is sent, change the field
     var remUser = PKUtil.getRememberedSsoUsername()
-    if (remUser != '') {
+    if (remUser != '' && document.getElementById(Login.userNameInput).value == '') {
         // Fill out username field
         document.getElementById(Login.userNameInput).value = remUser;
-        // skip username page
+        // Skip username page
         paginationManager.validateAndNext();
     }
 }
