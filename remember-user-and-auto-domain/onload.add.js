@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////
-// Remember username + auto domain suffix v2
-// Copyright (c) by patrik.kernstock.net @ 2022-07-24 under GNU GPLv3 license. All rights reserved.
+// Remember username + auto domain suffix v2.1
+// Copyright (c) by patrik.kernstock.net @ 2022-10-12 under GNU GPLv3 license. All rights reserved.
 // https://github.com/patschi/adfs-themes/tree/master/remember-user-and-auto-domain
 // https://patrik.kernstock.net/2021/06/adfs-2019-allow-logon-with-samaccountname/
 
@@ -9,6 +9,8 @@
 var defaultDomain = 'domain.tld'
 // Amount of hours the username should be remembered in cookie (0 = disabled)
 var rememberUserCookieLifetime = 24 * 365; // one year
+// If the "Keep me signed in" should be checked by default
+var keepMeSignedInDefault = false;
 ////////////////////////////////////////////////
 // DO NOT TOUCH BELOW.
 
@@ -66,7 +68,7 @@ if (typeof document.forms['loginFormPaginated'] != 'undefined' && typeof Paginat
         _self.updatePagesWithUsername(userName.value);
         u.clearError();
 
-        // remember the username
+        // Remember the username
         PKUtil.rememberSsoUsername(userName.value)
 
         if (_self.options.currentPageIndex + 1 >= _self.options.pages.length) {
@@ -88,9 +90,14 @@ if (typeof document.forms['loginFormPaginated'] != 'undefined' && typeof Paginat
         // Skip username page
         paginationManager.validateAndNext();
     }
+
+    // If enabled here and on ADFS, we check "Keep me signed in" by default
+    if (keepMeSignedInDefault && document.getElementById("kmsiInput") != null) {
+        document.getElementById("kmsiInput").checked = true;
+    }
 }
 
-// THis code is for "Update/Change Password" support
+// This code is for "Update/Change Password" support
 if (typeof document.forms['updatePasswordForm'] != 'undefined' && typeof PaginationManager == 'undefined') {
     // Fill out username field if we have cookie set
     var remUser = PKUtil.getRememberedSsoUsername()
